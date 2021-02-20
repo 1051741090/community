@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--这里先定位主接口-->
+<mapper namespace="com.nowcoder.community.b_dao.UserMapper1">
+    <sql id="insertFields">
+        username, password, salt, email, type, status, activation_code, header_url, create_time
+    </sql>
+    <sql id="selectFields">
+        id, username, password, salt, email, type, status, activation_code, header_url, create_time
+    </sql>
+
+    <!--自增加id，不用自己记id-->    <!--parameterType，是后面用User结构体传参才加，很少用-->
+    <insert id="insertUser" parameterType="com.nowcoder.community.a_entity.User" keyProperty="id">
+        INSERT INTO USER (<include refid="insertFields"></include>)
+        VALUES(#{username},#{password},
+        #{salt},#{email},#{type},
+        #{status},#{activationCode},#{headerUrl},#{createTime})
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE user set status = #{status} where id=#{id}
+    </update>
+    <update id="updateHeader">
+        UPDATE user set header_url = #{headerUrl} where id=#{id}
+    </update>
+    <update id="updatePassword">
+        UPDATE user set password = #{password} where id=#{id}
+    </update>
+
+
+    <!--查-->
+    <select id="selectById" resultType="com.nowcoder.community.a_entity.User">
+        SELECT * from user WHERE id = #{id}
+    </select>
+    <select id="selectByName" resultType="com.nowcoder.community.a_entity.User">
+        SELECT * from user WHERE username = #{username}
+    </select>
+    <!--不能用上方的refile全部，因为sql语句不能selec em where em=，这不重复了么，用*自动去重-->
+    <select id="selectByEmail" resultType="com.nowcoder.community.a_entity.User">
+        SELECT * from user WHERE email = #{email}
+    </select>
+    
+
+</mapper>

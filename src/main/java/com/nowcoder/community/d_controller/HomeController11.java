@@ -8,6 +8,7 @@ import com.nowcoder.community.c_service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 @Controller
 //开始跳转到模板分支
 public class HomeController11 {
@@ -48,8 +48,14 @@ public class HomeController11 {
             discussPosts.add(map);
         }
         model.addAttribute("discussPosts",discussPosts);
-
-        System.out.println(discussPosts);
         return "moban/index";//自动在temp.moban下找xx.html【1这是model传给static/路径下的/index.html】
+    }
+
+    //独立的logout[（与之前无任何关系）提取cok，改1]
+    @RequestMapping("/logout")
+    public String genjuCkTuichu(Model model, @CookieValue("ticket") String ticket){//ck在参数拿
+        userService.logout(ticket);//涉及mapper
+
+        return "redirect:/login";//重新访问登录页，并先一个来回加载验证码。redic默认get
     }
 }

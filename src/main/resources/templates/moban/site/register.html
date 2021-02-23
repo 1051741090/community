@@ -6,12 +6,10 @@
 	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 	<link rel="stylesheet" href="css/global.css" />
-	<title>牛客网-首页</title>
-	<script src="js/global.js"></script>
+	<link rel="stylesheet" href="css/login.css" />
+	<title>牛客网-注册</title>
 </head>
 <body>
-<p th:text="${name}"></p>
-    <p th:text="${res}"></p>
 	<div class="nk-container">
 		<!-- 头部 -->
 		<header class="bg-dark sticky-top" >
@@ -41,7 +39,7 @@
 							</li>
 							<li class="nav-item ml-3 btn-group-vertical dropdown" th:if="${loginUser!=null}">
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<img th:src="${loginUser.headerUrl}" class="rounded-circle" style="width:30px;"/>
+									<img src="http://images.nowcoder.com/head/1t.png" class="rounded-circle" style="width:30px;"/>
 								</a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item text-center" href="site/profile.html">个人主页</a>
@@ -62,109 +60,68 @@
 			</div>
 		</header>
 
-		<div class="main">
-			<div class="container">
-				<div class="position-relative">
-					<!-- 筛选条件 -->
-					<ul class="nav nav-tabs mb-3">
-						<li class="nav-item">
-							<a class="nav-link active" href="#">最新</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">最热</a>
-						</li>
-					</ul>
-					<button type="button" class="btn btn-primary btn-sm position-absolute rt-0" data-toggle="modal" data-target="#publishModal">我要发布</button>
-				</div>
-				<!-- 弹出框 -->
-				<div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="publishModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-lg" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="publishModalLabel">新帖发布</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<form>
-									<div class="form-group">
-										<label for="recipient-name" class="col-form-label">标题：</label>
-										<input type="text" class="form-control" id="recipient-name">
-									</div>
-									<div class="form-group">
-										<label for="message-text" class="col-form-label">正文：</label>
-										<textarea class="form-control" id="message-text" rows="15"></textarea>
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-								<button type="button" class="btn btn-primary" id="publishBtn">发布</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- 提示框 -->
-				<div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-lg" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="hintModalLabel">提示</h5>
-							</div>
-							<div class="modal-body" id="hintBody">
-								发布完毕!
-							</div>
-						</div>
-					</div>
-				</div>
 
-				<!-- 帖子列表 -->
-				<ul class="list-unstyled">
-					<li class="media pb-3 pt-3 mb-3 border-bottom" th:each="map:${discussPosts}">
-						<a href="site/profile.html">
-							<img th:src="${map.user.headerUrl}" class="mr-4 rounded-circle" alt="用户头像" style="width:50px;height:50px;">
-						</a>
-						<div class="media-body">
-							<h6 class="mt-0 mb-3">
-								<a href="#" th:utext="${map.post.title}">备战春招，面试刷题跟他复习，一个月全搞定！</a>
-								<span class="badge badge-secondary bg-primary" th:if="${map.post.type==1}">置顶</span>
-								<span class="badge badge-secondary bg-danger" th:if="${map.post.status==1}">精华</span>
-							</h6>
-							<div class="text-muted font-size-12">
-								<u class="mr-3" th:utext="${map.user.username}">寒江雪</u> 发布于 <b th:text="${#dates.format(map.post.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b>
-								<ul class="d-inline float-right">
-									<li class="d-inline ml-2">赞 11</li>
-									<li class="d-inline ml-2">|</li>
-									<li class="d-inline ml-2">回帖 7</li>
-								</ul>
+		<!--内容-->
+		<div class="main">
+			<div class="container pl-5 pr-5 pt-3 pb-3 mt-3 mb-3">
+				<h3 class="text-center text-info border-bottom pb-3">注&nbsp;&nbsp;册</h3>
+				<form class="mt-5" method="post" th:action="@{/register}">
+					<div class="form-group row">
+						<label for="username" class="col-sm-2 col-form-label text-right">账号:</label>
+						<div class="col-sm-10">
+							<!--thclass:有msg不让提交并标红，
+							thtext回退保留注册错误前已经填入的信息-->
+							<input type="text"
+								   th:class="|form-control ${usernameMsg!=null?'is-invalid':''}|"
+								   th:value="${user!=null?user.username:''}"
+								   id="username" name="username" placeholder="请输入您的账号!" required>
+							<div class="invalid-feedback" th:text="${usernameMsg}">
+								该账号已存在!
 							</div>
 						</div>
-					</li>
-				</ul>
-				 <!--分页-->
-				<nav class="mt-5" th:if="${page.rows>0}">
-					<ul class="pagination justify-content-center">
-						<li class="page-item">
-                            <!--@{${}（）}  @{}和（）为了连url，后面给RM/index的java类传？后参数，并自动识别set-->
-							<a class="page-link" th:href="@{${page.path}(current=1)}">首页</a>
-						</li>
-                        <li th:class="|page-item ${page.current==1?'disabled':''}|">
-                            <!--变的（反复迭代传给java/indexRM接收的）变量，要用${}}-->
-							<a class="page-link" th:href="@{${page.path}(current=${page.current-1})}">上一页</a>
-                        </li>
-						<li th:class="|page-item ${page.current==i?'active':''}|" th:each="i:${#numbers.sequence(page.from,page.to)}">
-                            <!--下面这句的参数会被 上方帖子列表接收改动-->
-							<a class="page-link" th:href="@{${page.path}(offset=${i-1}*${page.limit}, limit=${page.limit}, current=${i})}" th:text="${i}">1</a>
-						</li>
-                        <li th:class="|page-item ${page.current==page.total?'disabled':''}|">
-                            <a class="page-link" th:href="@{${page.path}(current=${page.current+1})}">下一页</a>
-						</li>
-						<li class="page-item">
-							<a class="page-link" th:href="@{${page.path}(current=${page.total})}">末页</a>
-						</li>
-					</ul>
-				</nav>
+					</div>
+					<div class="form-group row mt-4">
+						<label for="password" class="col-sm-2 col-form-label text-right">密码:</label>
+						<div class="col-sm-10">
+							<input type="password"
+								   th:class="|form-control ${passwordMsg!=null?'is-invalid':''}|"
+								   th:value="${user!=null?user.password:''}"
+								   id="password" name="password" placeholder="请输入您的密码!" required>
+							<div class="invalid-feedback" th:text="${passwordMsg}">
+								密码长度不能小于8位!
+							</div>
+						</div>
+					</div>
+					<div class="form-group row mt-4">
+						<label for="confirm-password" class="col-sm-2 col-form-label text-right">确认密码:</label>
+						<div class="col-sm-10">
+							<input type="password" class="form-control"
+								   th:value="${user!=null?user.password:''}"
+								   id="confirm-password" placeholder="请再次输入密码!" required>
+							<div class="invalid-feedback">
+								两次输入的密码不一致!
+							</div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="email" class="col-sm-2 col-form-label text-right">邮箱:</label>
+						<div class="col-sm-10">
+							<input type="email"
+								   th:class="|form-control ${emailMsg!=null?'is-invalid':''}|"
+								   th:value="${user!=null?user.email:''}"
+								   id="email" name="email" placeholder="请输入您的邮箱!" >
+							<div class="invalid-feedback" th:text="${emailMsg}">
+								该邮箱已注册!
+							</div>
+						</div>
+					</div>
+					<div class="form-group row mt-4">
+						<div class="col-sm-2"></div>
+						<div class="col-sm-10 text-center">
+							<button type="submit" class="btn btn-info text-white form-control">立即注册</button>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 
@@ -231,11 +188,10 @@
 		</footer>
 	</div>
 
-	<!--<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>-->
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+	<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 	<script src="js/global.js"></script>
-	<script src="js/index.js"></script>
+	<script src="js/register.js"></script>
 </body>
 </html>
